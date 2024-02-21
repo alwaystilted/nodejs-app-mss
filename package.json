@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "This Project explains all Node JS examples",
   "main": "app.js",
-  "publishConfig": {
-    "registry": "http://13.201.133.218:9980/mithuntechnologies/repository/mssnodejsrepo/"
-  },
+  "publishConfig":{"registry":"https://alwaystilted2.jfrog.io/artifactory/api/npm/npm-repository-npm/"},
   
   "scripts": {
     "server": "http-server -c-1 -p 9999",
@@ -27,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://13.212.29.25:9980/mithuntechnologies/repository/nodejsproject/"
+    "url": "https://alwaystilted2.jfrog.io/artifactory/api/npm/npm-repository-npm/"
   },
   "keywords": [
     "node",
