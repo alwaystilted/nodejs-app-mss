@@ -43,7 +43,8 @@ pipeline {
     }
     stage('RunApp'){
         steps{
-            sh 'npm run app.js &'
+            // sh './scripts/runApp.sh' can also be used to start the app
+            sh 'npm run app.js &' 
         }
     }
   }
