@@ -1,35 +1,50 @@
-node
-{
-
-//Checkout Code stage
-stage('CheckoutCode'){
-git credentialsId: '4368c281-f352-4495-89c1-730c9742fca9', url: 'https://github.com/MithunTechnologiesDevOps/nodejs-app-mss.git'
-}
-
-//Build
-stage('Build'){
-nodejs(nodeJSInstallationName: 'nodejs18.6.0'){
-sh "npm install"
-}
-}
-
-//Execute SOnarQUbe Report
-stage('ExecuteSonarQubeReport'){
-nodejs(nodeJSInstallationName: 'nodejs18.6.0'){
-sh "npm run sonar"
-}
-}
-
-stage('UploadArtifcatsintoNexus')
-{
-sh "npm publish"
-}
-
-stage('RunNodeJsApp')
-{
-sh "npm run app.js &"
-}
-
-
-
-}
+pipeline {
+  agent any
+  stages {
+        stage('CleanupWS'){
+            steps{
+            cleanWs()
+            }
+        }
+        stage('CheckoutSCM'){
+            steps{
+            git 'https://github.com/alwaystilted/nodejs-app-mss.git'
+            }
+        }
+        stage('NodeJSBuild'){
+            steps{
+            sh 'npm install'
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+            script {
+            // requires SonarQube Scanner 2.8+
+            scannerHome = tool 'sonar'
+            }
+            withSonarQubeEnv('sonar') {
+            sh "${scannerHome}/bin/sonar-scanner -Dsonar.organization=alwaystilted -Dsonar.projectKey=alwaystilted -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io"
+        }
+      }
+    }
+    stage('Qualitygate analysis'){
+        steps {
+        script {
+          timeout(time: 2, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true, credentialsId: 'sonar-token'
+          }
+        }
+      }
+    }
+    stage('PublishARTIFACT'){
+        steps{
+            sh 'npm publish'
+        }
+    }
+    stage('RunApp'){
+        steps{
+            sh 'npm run app.js &'
+        }
+    }
+  }
+} 
