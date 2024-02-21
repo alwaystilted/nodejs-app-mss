@@ -23,10 +23,6 @@
   "engines": {
     "node": "v10.6.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://alwaystilted2.jfrog.io/artifactory/api/npm/npm-repository-npm/"
-  },
   "keywords": [
     "node",
     "Mithun Technologies",
